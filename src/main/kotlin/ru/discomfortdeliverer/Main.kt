@@ -2,10 +2,13 @@ package ru.discomfortdeliverer
 
 import com.sun.java_cup.internal.runtime.Scanner
 import kotlinx.coroutines.runBlocking
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import ru.discomfortdeliverer.news.News
 
+private val logger = LoggerFactory.getLogger("Main.kt")
 fun main() = runBlocking {
+    logger.info("App started")
     val newsList = getNews(30)
 
     val startDate = LocalDate.of(2024, 8, 1)
@@ -13,6 +16,7 @@ fun main() = runBlocking {
     val range = startDate..endDate
 
     val listOfAllNewsInRange = findAllNewsInRange(range)
+    logger.info("Метод: main(). Размер списка со всеми новостями в промежутке={}, size={}",range, listOfAllNewsInRange.size)
 
     val mostRatedNews = listOfAllNewsInRange.getMostRatedNews(8, range)
 
@@ -29,12 +33,14 @@ fun main() = runBlocking {
     val scanner = java.util.Scanner(System.`in`)
     println("Введить путь к файлу куда сохранить новости:")
     val filePath = scanner.nextLine()
+    logger.info("Метод: main(). Введенный путь для сохранения={}", filePath)
 
     // Сохранение новостей в файл
     printer.saveToFile(filePath)
 }
 
 suspend fun findAllNewsInRange(period: ClosedRange<LocalDate>): List<News> {
+    logger.info("Метод: findAllNewsInRange с параметром period={}", period)
     var listOfNewsInRange = ArrayList<News>()
 
     var i: Int = 1

@@ -1,8 +1,11 @@
 package ru.discomfortdeliverer
 
+import org.slf4j.LoggerFactory
 import java.io.File
 import ru.discomfortdeliverer.news.News
+import java.nio.file.Paths
 
+private val logger = LoggerFactory.getLogger("NewsPrinter.kt")
 // Определяем класс NewsPrinter для DSL
 class NewsPrinter {
     private val newsList = mutableListOf<News>()
@@ -32,12 +35,14 @@ class NewsPrinter {
         // Проверка на валидность пути
         if (!file.parentFile.exists()) {
             println("Ошибка: Директория '${file.parent}' не существует.")
+            logger.warn("Метод: saveToFile(filePath) Ошибка - Директория '{}' не существует", file.parent)
             return
         }
 
         // Проверка на существование файла
         if (file.exists()) {
             println("Ошибка: Файл '${file.name}' уже существует. Пожалуйста, выберите другое имя или путь.")
+            logger.warn("Метод: saveToFile(filePath) Ошибка - Файл '{}' уже существует", file.name)
             return
         }
 
@@ -54,6 +59,7 @@ class NewsPrinter {
                 writer.println("---")
             }
         }
+        logger.info("Метод: saveToFile(filePath) Новости сохранены в файл={}", file.name)
         println("News saved to $filePath")
     }
 }
