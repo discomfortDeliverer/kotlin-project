@@ -46,21 +46,26 @@ class NewsPrinter {
             return
         }
 
-        file.printWriter().use { writer ->
-            newsList.forEach { news ->
-                writer.println("ID: ${news.id}")
-                writer.println("Title: ${news.title}")
-                writer.println("Place: ${news.place?.id ?: "N/A"}")
-                writer.println("Description: ${news.description}")
-                writer.println("Site URL: ${news.siteUrl}")
-                writer.println("Favorites: ${news.favoritesCount}, Comments: ${news.commentsCount}")
-                writer.println("Rating: ${news.rating}")
-                writer.println("Publication date: ${convertMillisToLocalDateTime(news.publicationDate)}")
-                writer.println("---")
+        try {
+            file.printWriter().use { writer ->
+                newsList.forEach { news ->
+                    writer.println("ID: ${news.id}")
+                    writer.println("Title: ${news.title}")
+                    writer.println("Place: ${news.place?.id ?: "N/A"}")
+                    writer.println("Description: ${news.description}")
+                    writer.println("Site URL: ${news.siteUrl}")
+                    writer.println("Favorites: ${news.favoritesCount}, Comments: ${news.commentsCount}")
+                    writer.println("Rating: ${news.rating}")
+                    writer.println("Publication date: ${convertMillisToLocalDateTime(news.publicationDate)}")
+                    writer.println("---")
+                }
             }
+            logger.info("Метод: saveToFile(filePath) Новости сохранены в файл={}", file.name)
+            println("Новости сохранены в $filePath")
+        } catch (e: Exception) {
+            println("Ошибка при сохранении файла: ${e.message}")
+            logger.error("Метод: saveToFile(filePath) Ошибка при сохранении файла", e)
         }
-        logger.info("Метод: saveToFile(filePath) Новости сохранены в файл={}", file.name)
-        println("News saved to $filePath")
     }
 }
 

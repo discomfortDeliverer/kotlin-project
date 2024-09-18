@@ -12,21 +12,23 @@ private val logger = LoggerFactory.getLogger("NewsUtils.kt")
 
 fun List<News>.getMostRatedNews(count: Int, period: ClosedRange<LocalDate>): List<News> {
     logger.info("Метод: getMostRatedNews(count, period). count={}, period={}", count, period)
-    // Фильтрация новостей по периоду времени
-    val filteredNews = this.filter { news ->
-        val newsDate = convertMillisToLocalDateTime(news.publicationDate).toLocalDate()
-        newsDate in period
-    }
 
-    // Расчет рейтинга и сортировка
-    for (news in filteredNews) {
-        news.rating = calculateRating(news.favoritesCount, news.commentsCount)
-    }
+    val mostRatedNews = this.asSequence()
+        .filter { news ->
+            val newsDate = convertMillisToLocalDateTime(news.publicationDate).toLocalDate()
+            newsDate in period
+        }
+        .map { news ->
+            news.rating = calculateRating(news.favoritesCount, news.commentsCount)
+            news
+        }
+        .sortedByDescending { it.rating }
+        .take(count)
+        .toList()
 
-    logger.info("Метод: getMostRatedNews(count, period). Размер отсортированного и отфильтрованного" +
-            " списка новостей={}", filteredNews.size)
-    // Возвращаем не более count новостей
-    return filteredNews.sortedByDescending { it.rating }.take(count)
+    logger.info("Метод: getMostRatedNews(count, period). Размер отсортированного и отфильтрованного списка новостей={}", mostRatedNews.size)
+
+    return mostRatedNews
 }
 
 fun convertMillisToLocalDateTime(seconds: Long): LocalDateTime {
