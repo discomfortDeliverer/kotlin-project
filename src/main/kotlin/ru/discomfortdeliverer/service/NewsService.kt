@@ -1,4 +1,4 @@
-package ru.discomfortdeliverer
+package ru.discomfortdeliverer.service
 
 import org.slf4j.LoggerFactory
 import java.time.Instant
@@ -6,9 +6,9 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.math.exp
-import ru.discomfortdeliverer.news.News
+import ru.discomfortdeliverer.dto.news.News
 
-private val logger = LoggerFactory.getLogger("NewsUtils.kt")
+private val logger = LoggerFactory.getLogger("NewsService.kt")
 
 fun List<News>.getMostRatedNews(count: Int, period: ClosedRange<LocalDate>): List<News> {
     logger.info("Метод: getMostRatedNews(count, period). count={}, period={}", count, period)

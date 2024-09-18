@@ -1,4 +1,4 @@
-package ru.discomfortdeliverer
+package ru.discomfortdeliverer.client
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -7,15 +7,16 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
-import ru.discomfortdeliverer.news.News
-import ru.discomfortdeliverer.news.NewsResponse
+import ru.discomfortdeliverer.dto.news.News
+import ru.discomfortdeliverer.dto.news.NewsResponse
 
 private val logger = LoggerFactory.getLogger("NewsClient.kt")
+private val url = "https://kudago.com/public-api/v1.4/news/"
+private val location = "spb"
 suspend fun getNews(count: Int = 100): List<News> {
     logger.debug("Метод: getNews(count) count={}", count)
     val client = HttpClient(CIO)
-    val location = "spb"
-    val url = "https://kudago.com/public-api/v1.4/news/"
+
 
     return try {
         val response: HttpResponse = client.get(url) {

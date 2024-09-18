@@ -1,10 +1,13 @@
 package ru.discomfortdeliverer
 
-import com.sun.java_cup.internal.runtime.Scanner
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
+import ru.discomfortdeliverer.client.getNews
+import ru.discomfortdeliverer.client.getNewsByPages
 import java.time.LocalDate
-import ru.discomfortdeliverer.news.News
+import ru.discomfortdeliverer.dto.news.News
+import ru.discomfortdeliverer.service.convertMillisToLocalDateTime
+import ru.discomfortdeliverer.service.getMostRatedNews
 
 private val logger = LoggerFactory.getLogger("Main.kt")
 fun main() = runBlocking {
@@ -26,6 +29,11 @@ fun main() = runBlocking {
             addNews(news)
         }
     }
+    val newsFileSaver = newsFileSaver {
+        mostRatedNews.forEach { news ->
+            addNews(news)
+        }
+    }
 
     // Печать новостей в консоль
     printer.printToConsole()
@@ -36,7 +44,7 @@ fun main() = runBlocking {
     logger.info("Метод: main(). Введенный путь для сохранения={}", filePath)
 
     // Сохранение новостей в файл
-    printer.saveToFile(filePath)
+    newsFileSaver.saveToFile(filePath)
 }
 
 suspend fun findAllNewsInRange(period: ClosedRange<LocalDate>): List<News> {

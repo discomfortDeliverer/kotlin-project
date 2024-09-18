@@ -1,7 +1,7 @@
-package ru.discomfortdeliverer.news
+package ru.discomfortdeliverer.dto.news
 
 import kotlinx.serialization.Serializable
-import ru.discomfortdeliverer.news.News
+import ru.discomfortdeliverer.dto.news.News
 
 @Serializable
 data class NewsResponse(

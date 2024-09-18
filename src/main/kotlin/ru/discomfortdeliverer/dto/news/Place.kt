@@ -1,4 +1,4 @@
-package ru.discomfortdeliverer.news
+package ru.discomfortdeliverer.dto.news
 
 import kotlinx.serialization.Serializable
 
